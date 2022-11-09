@@ -1,12 +1,15 @@
 package storage
 
 import (
+	"fmt"
 	"testing"
+
 	"github.com/bxcodec/faker/v4"
 	"github.com/stretchr/testify/require"
 )
 
 func createBlog(t *testing.T) *Blog {
+	fmt.Println("--- createBlog ---")
 	var blog *Blog
 	blog, err := dbManager.Create(&Blog{
 		Title: faker.Sentence(),
@@ -19,11 +22,13 @@ func createBlog(t *testing.T) *Blog {
 }
 
 func deleteBlog(id int, t *testing.T) {
+	fmt.Println("--- deleteBlog ---")
 	err := dbManager.DeleteBlog(id)
 	require.NoError(t, err)
 }
 
 func TestGetBlog(t *testing.T) {
+	fmt.Println("--- TestGetBlog ---")
 	b := createBlog(t)
 	blog, err := dbManager.GetBlog(b.Id)
 	require.NoError(t, err)
@@ -33,11 +38,13 @@ func TestGetBlog(t *testing.T) {
 }
 
 func TestCreateBlog(t *testing.T) {
+	fmt.Println("--- TestCreate ---")
 	b := createBlog(t)
 	deleteBlog(b.Id, t)
 }
 
 func TestUpdateBlog(t *testing.T) {
+	fmt.Println("--- TestUpdateBlog ---")
 	b := createBlog(t)
 	b.Author = faker.Name()
 	b.Title = faker.Sentence()
@@ -50,12 +57,14 @@ func TestUpdateBlog(t *testing.T) {
 }
 
 func TestDeleteBlog(t *testing.T) {
+	fmt.Println("--- TestDeleteBlog ---")
 	b := createBlog(t)
 	deleteBlog(b.Id, t)
 }
 
 
 func TestGetAllBlogs(t *testing.T) {
+	fmt.Println("--- TestGetAllBlogs ---")
 	b := createBlog(t)
 
 	blogs, err := dbManager.GetAll(&GetBlogsQueryParam{
