@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/bxcodec/faker/v4"
+	"golang/storage"
 )
 
-func InsertFakeDate(db *DBManager) error {
-	var blog Blog
+func InsertFakeDate(db *storage.DBManager) error {
+	var blog storage.Blog
 	for i := 1; i <= 1000; i++ {
 		blog.Title = faker.Sentence()
 		blog.Description = faker.Sentence()
