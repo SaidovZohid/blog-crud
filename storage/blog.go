@@ -15,18 +15,18 @@ func NewDBManager(db *sql.DB) *DBManager {
 }
 
 type Blog struct {
-	Id int
-	Title string
-	Description string
-	Author string
-	CreatedAt time.Time
+	Id          int64 `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Author      string `json:"author"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
 type GetBlogsQueryParam struct {
 	Author string
-	Title string
-	Page int32
-	Limit int32
+	Title  string
+	Page   int32
+	Limit  int32
 }
 
 func (b *DBManager) Create(blog *Blog) (*Blog, error) {
@@ -41,7 +41,7 @@ func (b *DBManager) Create(blog *Blog) (*Blog, error) {
 			author
 		) VALUES ($1,$2,$3)
 		RETURNING id, title, description, author, created_at
-	`	
+	`
 	row := tx.QueryRow(
 		query,
 		blog.Title,
@@ -113,7 +113,7 @@ func (b *DBManager) GetAll(params *GetBlogsQueryParam) ([]*Blog, error) {
 	return blogs, nil
 }
 
-func (d *DBManager) GetBlog(id int) (*Blog, error) {
+func (d *DBManager) GetBlog(id int64) (*Blog, error) {
 	query := `
 		select 
 			id,
@@ -133,12 +133,12 @@ func (d *DBManager) GetBlog(id int) (*Blog, error) {
 		&blog.CreatedAt,
 	)
 	if err != nil {
-		return  nil, err
+		return nil, err
 	}
 	return &blog, nil
 }
- 
-func (d *DBManager) DeleteBlog(id int) error {
+
+func (d *DBManager) DeleteBlog(id int64) error {
 	query := `
 		delete from blogs where id = $1
 	`
@@ -162,7 +162,7 @@ func (d *DBManager) UpdateBlog(blog *Blog) (*Blog, error) {
 			author
 		) VALUES ($1,$2,$3)
 		RETURNING id, title, description, author, created_at
-	`	
+	`
 	row := tx.QueryRow(
 		query,
 		blog.Title,

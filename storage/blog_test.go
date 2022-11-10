@@ -21,7 +21,7 @@ func createBlog(t *testing.T) *Blog {
 	return blog
 }
 
-func deleteBlog(id int, t *testing.T) {
+func deleteBlog(id int64, t *testing.T) {
 	fmt.Println("--- deleteBlog ---")
 	err := dbManager.DeleteBlog(id)
 	require.NoError(t, err)

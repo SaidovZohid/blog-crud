@@ -3,8 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
+	"golang/server"
 	"golang/storage"
+	"log"
+
 	_ "github.com/lib/pq"
 )
 
@@ -18,10 +20,18 @@ const (
 
 func main(){
 	connstr := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
-	_, err := sql.Open("postgres", connstr)
+	db, err := sql.Open("postgres", connstr)
 	if err != nil {
 		log.Fatalf("Failed to open connection: %v", err)
 	}
+	api := storage.NewDBManager(db)
+	server := server.NewServer(api)
+
+	err = server.Run(":8080")
+	if err != nil {
+		log.Fatalf("failed to start server: %v", err)
+	}
+
 	// dbManager := storage.NewDBManager(db)
 	// err = InsertFakeDate(dbManager)
 	// if err != nil {
